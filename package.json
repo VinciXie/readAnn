@@ -1,0 +1,16 @@
+{
+  "name": "readAnn",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "electron": "electron ."
+  },
+  "devDependencies": {
+    "electron": "^1.7.9",
+    "openlayers": "^4.4.2"
+  },
+  "dependencies": {
+    "express": "^4.16.2"
+  }
+}
