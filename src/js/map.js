@@ -4,7 +4,7 @@
 // let feature = new ol.Feature(new ol.geom.LineString(coordinates))
 // console.log('feature', feature);
 // source.addFeature(feature)
-const extent = [0, 0, 1000, 1000]
+const extent = [0, -1000, 1000, 0]
 
 function openLayer({url, mpp}) {
   console.log('url', url);
@@ -82,7 +82,7 @@ class OpenLayer {
   viewFactory() {
     return new ol.View({
       center: ol.extent.getCenter(extent),
-      resolution: 2,
+      resolution: 1,
       maxResolution: 16,
       minResolution: 1,
       extent,
@@ -103,7 +103,7 @@ class OpenLayer {
 
 }
 
-OpenLayer.extent = [0, 0, 1000, 1000]
+OpenLayer.extent = extent
 
 
 module.exports = openLayer;

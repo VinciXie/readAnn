@@ -1,6 +1,6 @@
 // const openLayer = require('./map');
-const OpenLayer = require('./map');
-const { feaFactory } = require('./readAnno');
+const OpenLayer = require('./js/map.js');
+const { feaFactory } = require('./js/readAnno.js');
 
 const fs = require('fs');
 const path = require('path');
@@ -11,7 +11,7 @@ const annodir = path.join(__dirname, '../Annotations/');
 let filenames = fs.readdirSync(imgsdir);
 filenames = filenames.map(name => name.slice(0, -5))
 // console.log('filenames', filenames);
-const extent = [0, 0, 1000, 1000]
+const extent = OpenLayer.extent;
 
 let name = filenames[0];
 
@@ -52,13 +52,21 @@ let features = feaFactory(doc);
 let source = new ol.source.Vector();
 let Vector = new ol.layer.Vector({
   source,
-  extent
+  // extent
 });
 source.addFeatures(features)
 _map.addLayer(Vector)
 
 _map.on('click', function (e) {
-  console.log('e', e);
+  // console.log('e', e);
   let coordinate = e.coordinate
-
+  console.log('coor', coordinate);
+  features.map(f => {
+    let geo = f.getGeometry();
+    let isIn = geo.intersectsCoordinate(coordinate);
+    if (isIn) {
+      // console.log('!!!!');
+      console.log(geo);
+    }
+  })
 })
