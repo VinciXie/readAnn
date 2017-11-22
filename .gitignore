@@ -3,4 +3,5 @@
 /data
 /Annotations
 /out_images
+/labels
 *.lock

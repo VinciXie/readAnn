@@ -1,6 +1,7 @@
 // const openLayer = require('./map');
 const OpenLayer = require('./js/map.js');
 const { feaFactory } = require('./js/readAnno.js');
+const { getResult } = require('./js/result.js');
 
 const fs = require('fs');
 const path = require('path');
@@ -13,7 +14,13 @@ filenames = filenames.map(name => name.slice(0, -5))
 // console.log('filenames', filenames);
 const extent = OpenLayer.extent;
 
-let name = filenames[0];
+let index = localStorage.index
+if (index > filenames.length) {
+  index = 0
+}
+let name = filenames[index];
+console.log('name', name);
+document.querySelector('title').innerText = name
 
 function getXML(name) {
   let annPath = annodir + name + '.xml';
@@ -55,18 +62,14 @@ let Vector = new ol.layer.Vector({
   // extent
 });
 source.addFeatures(features)
-_map.addLayer(Vector)
+_map.addLayer(Vector);
 
-_map.on('click', function (e) {
-  // console.log('e', e);
-  let coordinate = e.coordinate
-  console.log('coor', coordinate);
-  features.map(f => {
-    let geo = f.getGeometry();
-    let isIn = geo.intersectsCoordinate(coordinate);
-    if (isIn) {
-      // console.log('!!!!');
-      console.log(geo);
-    }
-  })
-})
+
+let result = getResult(features);
+// let labelsPath = path.join(__dirname, `../labels/${name}.json`)
+// fs.writeFile(labelsPath, JSON.stringify(result), function (err) {
+//   if (err) throw err;
+//   console.log('The file has been saved!');
+//   localStorage.index = parseInt(index) + 1;
+//   location.reload()
+// })
