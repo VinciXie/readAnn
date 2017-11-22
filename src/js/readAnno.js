@@ -9,14 +9,20 @@ function vertexs2featureCoord(vertexs) {
   return coord
 }
 
-function coord2feature(coord) {
+function coord2polygon(coord) {
   var feature = new ol.Feature({
     geometry: new ol.geom.Polygon([coord]),
   });
   return feature
 }
 
-// 这个函数返回的是一个深度 1 的坐标的数组
+function coord2point(coord) {
+  var feature = new ol.Feature({
+    geometry: new ol.geom.Point(coord),
+  });
+  return feature
+}
+
 function parseAnno(doc) {
   let regions = doc.querySelectorAll('Region');
   // console.log('regions', regions);
@@ -28,15 +34,24 @@ function parseAnno(doc) {
     annoArr.push(coord)
   }
   return annoArr
-};
+}
 
-exports.feaFactory = function (doc) {
-  let annoArr = parseAnno(doc)
-  // let annoArr = [[[100, -100], [500, -150], [700, -600], [200, -700]]]
-  // console.log('annoArr', annoArr);
-  let features = annoArr.map(coord2feature)
+function toPolygon(arr) {
+  let features = arr.map(coord2polygon)
   // console.log('features', features);
   return features
-};
+}
 
-// module.exports = name;
+function toPoint(arr) {
+  let features = arr.map(coord2point)
+  // console.log('features', features);
+  return features
+}
+
+var FeaFactory = {
+  parseAnno,
+  toPolygon,
+  toPoint,
+}
+
+module.exports = FeaFactory;

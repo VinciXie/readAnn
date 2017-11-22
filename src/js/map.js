@@ -59,7 +59,10 @@ class OpenLayer {
       coordinateFormat: ol.coordinate.createStringXY(1),
       projection: this.projection,
     })
-    let controls = ol.control.defaults().extend([mousePositionControl])
+    let controls = ol.control.defaults({
+      attribution: false,
+      zoom: false
+    }).extend([mousePositionControl])
     return controls
   }
 
