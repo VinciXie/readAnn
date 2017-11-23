@@ -6,42 +6,6 @@
 // source.addFeature(feature)
 const extent = [0, -1000, 1000, 0]
 
-function openLayer({url, mpp}) {
-  console.log('url', url);
-  var projection = new ol.proj.Projection({
-    code: "image",
-    metersPerUnit: mpp,
-    units: "pixels",
-    extent,
-    // worldExtent: extent,
-  })
-
-  let view = new ol.View({
-    center: ol.extent.getCenter(extent),
-    zoom: 2,
-    maxZoom: 8,
-    extent,
-    projection
-  });
-
-  const map = new ol.Map({
-    layers: [
-      new ol.layer.Image({
-        source: new ol.source.ImageStatic({
-          url,
-          projection,
-          imageExtent: extent
-        })
-      })
-    ],
-    target: 'map',
-    view,
-  })
-
-  return map
-
-}
-
 
 class OpenLayer {
   constructor({url, mpp}) {
@@ -86,7 +50,7 @@ class OpenLayer {
     return new ol.View({
       center: ol.extent.getCenter(extent),
       resolution: 1,
-      maxResolution: 16,
+      maxResolution: 4,
       minResolution: 1,
       extent,
       projection: this.projection
@@ -109,5 +73,5 @@ class OpenLayer {
 OpenLayer.extent = extent
 
 
-module.exports = openLayer;
+// module.exports = openLayer;
 module.exports = OpenLayer;
