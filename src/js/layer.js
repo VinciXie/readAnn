@@ -1,4 +1,4 @@
-const ol = require('openlayers');
+// const ol = require('openlayers');
 
 var color = '#0000ff';
 
@@ -12,9 +12,9 @@ var style = new ol.style.Style({
   })
 })
 
-let source = new ol.source.Vector();
+let polygonSource = new ol.source.Vector();
 let layer = new ol.layer.Vector({
-  source,
+  source: polygonSource,
   // style
 });
 let pointLayer = new ol.layer.Vector({
@@ -29,10 +29,10 @@ let layerGroup = new ol.layer.Group({
 var Vector = {
   layerGroup,
   layer,
-  source,
+  polygonSource,
   pointLayer,
   addFeatures: function (f) {
-    source.addFeatures(f)
+    polygonSource.addFeatures(f)
   },
   addPoints: function (f) {
     pointLayer.getSource().addFeatures(f)

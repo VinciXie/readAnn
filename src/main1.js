@@ -37,11 +37,15 @@ function makeJSON() {
     // 提取 xml 的信息生成 feature
     let marks = XML_Parser.parseDOC(doc);
     let features = FeaFactory.toPolygon(marks);
-    var {result} = getResult(features);
+    Vector.source.clear(true)
+    Vector.addFeatures(features)
+
+    var {result} = getResult(Vector);
     // console.log('result 0 ', result[0]);
 
     fs.writeFileSync(labelsPath + `/${name}.json`, JSON.stringify(result))
-    console.log('The file has been saved!', name, getTime() - t1);
+    console.log('The file has been saved!', name, (getTime() - t1) / 1000 + 's');
+    break
   }
   console.log('successed!!!!!');
 }

@@ -4,7 +4,7 @@ const FeaFactory = require('./js/FeaFactory.js');
 const Vector = require('./js/layer.js');
 const XML_Parser = require('./js/parseXML.js');
 const { getResult } = require('./js/result.js');
-const ol = require('openlayers');
+// const ol = require('openlayers');
 
 const fs = require('fs');
 const path = require('path');
@@ -17,7 +17,7 @@ let files = fs.readdirSync(imgsdir);
 let filenames = [];
 for (let name of files) {
   if (name.startsWith('.')) {
-    console.log('name', name);
+    // console.log('name', name);
   } else {
     filenames.push(name.split('.')[0])
   }
@@ -53,22 +53,45 @@ function readImage(name, mpp) {
 
 // 先取得这个文件的 xml
 const doc = XML_Parser.XML2DOC(annodir, name);
-let mpp = doc.querySelector('Annotations').getAttribute('MicronsPerPixel');
+// let mpp = doc.querySelector('Annotations').getAttribute('MicronsPerPixel');
 // 再取得这个图像，并生成 ol
-const map = readImage(name, mpp);
+const map = readImage(name);
 // console.log('map', map);
 const _map = map.map;
 
 _map.addLayer(Vector.layerGroup);
 
+// _map.on('click', function (e) {
+//   // console.log('e', e);
+//   let coordinate = e.coordinate
+//   console.log('coordinate', coordinate);
+//   let callback = function (f) {
+//     console.log('f', f);
+//     // return f
+//   }
+//   // console.log('this.renderer_', this.renderer_);
+//   let hitTolerance = 0;
+//   let fffs = this.renderer_.forEachFeatureAtCoordinate(
+//       coordinate, this.frameState_, hitTolerance, callback, null,
+//       function () { return true }, null)
+//   // console.log('fffs', fffs);
+//   // console.log(this,
+//   //   this.hasFeatureAtPixel(pixel)
+//   // );
+// })
+
 // 提取 xml 的信息生成 feature
 let marks = XML_Parser.parseDOC(doc);
 let features = FeaFactory.toPolygon(marks);
+// let features = FeaFactory.toPolygon([
+//   [[10, -10], [100, -10], [100, -100], [10, -100]],
+//   [[50, -10], [150, -10], [150, -100], [50, -100]]
+// ]);
 Vector.addFeatures(features)
 // console.log('features', features);
 
 
-var {result, p_matrix} = getResult(features);
+var {result, p_matrix} = getResult(Vector);
 console.log('result 0 ', result[0]);
 // console.log('p', p_matrix);
 let pointFeatures = FeaFactory.toPoint(p_matrix);
