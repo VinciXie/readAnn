@@ -4,6 +4,7 @@ const FeaFactory = require('./js/FeaFactory.js');
 const Vector = require('./js/layer.js');
 const XML_Parser = require('./js/parseXML.js');
 const { getResult } = require('./js/result.js');
+const ol = require('openlayers');
 
 const fs = require('fs');
 const path = require('path');
@@ -88,10 +89,24 @@ let labelsPath = path.join(__dirname, `../labels`)
 //   location.reload()
 // })
 
-let btn = document.querySelector('.toggle-visible')
+let btn_toggle = document.querySelector('.toggle-visible')
 // console.log('btn', btn);
-btn.onclick = function (e) {
+btn_toggle.onclick = function (e) {
   // console.log('e', e);
   let visible = Vector.layerGroup.getVisible()
   Vector.layerGroup.setVisible(!visible)
+}
+
+let btn_next = document.querySelector('.next-image')
+// console.log('btn', btn);
+btn_next.onclick = function (e) {
+  // console.log('e', e);
+  index = localStorage.index = parseInt(localStorage.index) + 1
+  name = filenames[index];
+  console.log('map.imageLayer.getSource()', map.imageLayer.getSource());
+  map.imageLayer.setSource( new ol.source.ImageStatic({
+    url: imgsdir + name + '.jpeg',
+    projection: map.projection,
+    imageExtent: OpenLayer.extent
+  }) )
 }

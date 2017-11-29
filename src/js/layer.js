@@ -1,3 +1,4 @@
+const ol = require('openlayers');
 
 var color = '#0000ff';
 

@@ -3,14 +3,23 @@
 // 1 表示在内部
 function isIn(coordinate, features) {
   let n = 0;
-
-  features.map(f => {
+  let [x, y] = coordinate
+  let extent = [x - 20, y - 20, x + 20, y + 20];
+  for (let f of features) {
     let geo = f.getGeometry();
-    if (geo.intersectsCoordinate(coordinate)) {
-      // console.log('!!!!');
-      return n += 1
+    if ( geo.intersectsExtent(extent) ) {
+      // 中间 40 * 40 的范围内有细胞
+      // console.log('中间 40 * 40 的范围内有细胞', coordinate);
+      n = -1
     }
-  })
+    if (geo.intersectsCoordinate(coordinate)) {
+      // console.log('点在内部!!!!', coordinate);
+      // 点在内部
+      return n = 1
+    }
+
+  }
+
   return n
 }
 
@@ -34,7 +43,7 @@ exports.getResult = function (features) {
       p_matrix.push([x, -y])
       result[i][j] = isIn([x, -y], features)
     }
-    break
+    // break
   }
   // console.log('result', result);
   return {result, p_matrix}

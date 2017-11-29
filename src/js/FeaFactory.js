@@ -1,14 +1,17 @@
+// const ol = require('openlayers');
+const {geom, Feature} = require('openlayers');
+// console.log('Feature', Feature);
 
 function coord2polygon(coord) {
-  var feature = new ol.Feature({
-    geometry: new ol.geom.Polygon([coord]),
+  var feature = new Feature({
+    geometry: new geom.Polygon([coord]),
   });
   return feature
 }
 
 function coord2point(coord) {
-  var feature = new ol.Feature({
-    geometry: new ol.geom.Point(coord),
+  var feature = new Feature({
+    geometry: new geom.Point(coord),
   });
   return feature
 }
