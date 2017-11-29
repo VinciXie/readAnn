@@ -6,7 +6,15 @@ const sliding = 8;
 const patch = 41;
 const ks = 20;
 
-const classes = []
+const classes = [];
+// 数据说明
+// 生成的数据分 5 个档
+// 0 没有细胞
+// 1 外圈有细胞
+// 2 外圈到中圈有细胞
+// 3 细胞的边界
+// 4 细胞内
+
 
 function point2extent(coordinate, ks) {
   let [x, y] = coordinate;
@@ -93,3 +101,11 @@ exports.getResult = function ( { polygonSource } ) {
   // console.log('time', (getTime() - t1) / 1000 + 's' );
   return {result_pre, result, p_matrix}
 }
+
+// 数据说明
+// 生成的数据分 5 个档
+// 0 没有细胞
+// 1 外圈有细胞
+// 2 外圈到中圈有细胞
+// 3 细胞的边界
+// 4 细胞内

@@ -37,7 +37,7 @@ function makeJSON() {
     // 提取 xml 的信息生成 feature
     let marks = XML_Parser.parseDOC(doc);
     let features = FeaFactory.toPolygon(marks);
-    Vector.source.clear(true)
+    Vector.polygonSource.clear(true)
     Vector.addFeatures(features)
 
     var {result} = getResult(Vector);
@@ -45,7 +45,7 @@ function makeJSON() {
 
     fs.writeFileSync(labelsPath + `/${name}.json`, JSON.stringify(result))
     console.log('The file has been saved!', name, (getTime() - t1) / 1000 + 's');
-    break
+    // break
   }
   console.log('successed!!!!!');
 }
