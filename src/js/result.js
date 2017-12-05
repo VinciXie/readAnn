@@ -74,7 +74,7 @@ function inLevel(coordinate, source) {
   })
   return n;
 }
-
+var result_pre_all = [0,0,0,0,0];
 exports.getResult = function ( { polygonSource } ) {
   let t1 = getTime()
   let features = polygonSource.getFeatures()
@@ -93,11 +93,13 @@ exports.getResult = function ( { polygonSource } ) {
       p_matrix.push([x, -y])
       result[i][j] = inLevel([x, -y], polygonSource)
       result_pre[result[i][j]] += 1
+      result_pre_all[result[i][j]] += 1
       // break
     }
     // break
   }
   console.log('result_pre', result_pre);
+  console.log('result_pre_all', result_pre_all);
   // console.log('time', (getTime() - t1) / 1000 + 's' );
   return {result_pre, result, p_matrix}
 }
