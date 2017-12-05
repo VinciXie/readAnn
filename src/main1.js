@@ -28,6 +28,7 @@ function makeJSON() {
   if (!fs.existsSync(labelsPath)) {
     fs.mkdirSync(labelsPath)
   }
+  var totalTime = 0;
   for (var i = 0; i < filenames.length; i++) {
     let t1 = getTime()
     let name = filenames[i];
@@ -45,9 +46,10 @@ function makeJSON() {
 
     fs.writeFileSync(labelsPath + `/${name}.json`, JSON.stringify(result))
     console.log('The file has been saved!', name, (getTime() - t1) / 1000 + 's');
+    totalTime += getTime() - t1
     // break
   }
-  console.log('successed!!!!!');
+  console.log('successed!!!!! totalTime', totalTime / 1000 + 's');
 }
 
 
