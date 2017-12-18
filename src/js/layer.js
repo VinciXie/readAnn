@@ -14,6 +14,7 @@ var style = new ol.style.Style({
 
 let polygonSource = new ol.source.Vector();
 let layer = new ol.layer.Vector({
+  renderMode: 'image',
   source: polygonSource,
   // style
 });
@@ -31,8 +32,11 @@ var Vector = {
   layer,
   polygonSource,
   pointLayer,
-  addFeatures: function (f) {
-    polygonSource.addFeatures(f)
+  addFeature: function (oneFeature) {
+    polygonSource.addFeature(oneFeature)
+  },
+  addFeatures: function (features) {
+    polygonSource.addFeatures(features)
   },
   addPoints: function (f) {
     pointLayer.getSource().addFeatures(f)

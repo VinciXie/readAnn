@@ -14,17 +14,18 @@ function interactionsFactory() {
   });
   // select.on('select', function (e) {
   //   let coordinate = e.mapBrowserEvent.coordinate
-  //   // console.log('e coordinate', coordinate );
-  //   let sf = e.selected[0]
+  //   console.log('e coordinate', coordinate );
+  //   // let sf = e.selected[0]
   //   // console.log('selectedF', sf);
-  //   if (sf != undefined) {
-  //     let geo= sf.getGeometry()
-  //     // console.log('selected geo', geo);
-  //     let [x, y] = coordinate
-  //     let isIn = ol.geom.flat.contains.linearRingsContainsXY(
-  //     geo.getOrientedFlatCoordinates(), 0, geo.ends_, geo.stride, x, y)
-  //     // console.log(isIn);
-  //   }
+  //   // if (sf != undefined) {
+  //   //   let geo = sf.getGeometry()
+  //   //   console.log('selected geo', geo);
+  //   //   // let [x, y] = coordinate;
+  //   //   console.log('isIn', geo.intersectsCoordinate(coordinate));
+  //   //   // let isIn = ol.geom.flat.contains.linearRingsContainsXY(
+  //   //   // geo.getOrientedFlatCoordinates(), 0, geo.ends_, geo.stride, x, y)
+  //   //   // console.log(isIn);
+  //   // }
   // })
   return select
 }
@@ -73,7 +74,7 @@ class OpenLayer {
       view: this.view,
       controls: this.controls,
     });
-    map.addInteraction(interactionsFactory())
+    // map.addInteraction(interactionsFactory())
     return map
   }
 
@@ -83,7 +84,7 @@ class OpenLayer {
       center: [300, -300],
       resolution: 1,
       maxResolution: 4,
-      minResolution: 1,
+      minResolution: 0.5,
       extent,
       projection: this.projection
     });
@@ -92,7 +93,7 @@ class OpenLayer {
   projectionFactory(mpp) {
     let projection = new ol.proj.Projection({
       code: "image",
-      metersPerUnit: mpp,
+      metersPerUnit: mpp * 0.000001,
       units: "pixels",
       extent,
     })

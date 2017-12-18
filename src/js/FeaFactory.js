@@ -3,10 +3,7 @@
 // console.log('Feature', Feature);
 
 function coord2polygon(coord) {
-  var feature = new ol.Feature({
-    geometry: new ol.geom.Polygon([coord]),
-  });
-  return feature
+  return new ol.geom.Polygon([coord])
 }
 
 function coord2point(coord) {
@@ -16,10 +13,15 @@ function coord2point(coord) {
   return feature
 }
 
-function toPolygon(arr) {
-  let features = arr.map(coord2polygon)
-  // console.log('features', features);
-  return features
+/**
+ * [toPolygons description]
+ * @param  {[Array]} arr [description]
+ * @return {[ol.geom.Polygon]}     [description]
+ */
+function toPolygons(arr) {
+  let polygons = arr.map(coord2polygon)
+  // console.log('polygon', polygon);
+  return polygons
 }
 
 function toPoint(arr) {
@@ -29,7 +31,7 @@ function toPoint(arr) {
 }
 
 var FeaFactory = {
-  toPolygon,
+  toPolygons,
   toPoint,
 }
 

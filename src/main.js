@@ -26,12 +26,7 @@ for (let name of files) {
 console.log('filenames num', filenames.length);
 const extent = OpenLayer.extent;
 
-let index = localStorage.index
-// if (index >= filenames.length) {
-//   index = 0
-//   localStorage.index = index
-// }
-let name = filenames[index];
+let name = filenames[0];
 
 // TCGA-G9-6348-01Z-00-DX1
 // name = 'TCGA-G9-6348-01Z-00-DX1';
@@ -51,9 +46,20 @@ function readImage(name, mpp) {
   return map
 }
 
-// 先取得这个文件的 xml
-const doc = XML_Parser.XML2DOC(annodir, name);
-// let mpp = doc.querySelector('Annotations').getAttribute('MicronsPerPixel');
+let annoJSONFilePath = path.join(annodir, `${name}.json`);
+
+if ( !fs.existsSync( annoJSONFilePath ) ) {
+  console.log('json 文件不存在，读取 xml');
+  // 先取得这个文件的 xml
+  var doc = XML_Parser.XML2DOC(annodir, name);
+  var mpp = doc.querySelector('Annotations').getAttribute('MicronsPerPixel');
+
+} else {
+
+  var anno = fs.readFileSync(annoJSONFilePath, 'utf8');
+  anno = JSON.parse(anno);
+  var mpp = anno.mpp
+}
 // 再取得这个图像，并生成 ol
 const map = readImage(name);
 // console.log('map', map);
@@ -61,42 +67,62 @@ const _map = map.map;
 
 _map.addLayer(Vector.layerGroup);
 
-// _map.on('click', function (e) {
-//   // console.log('e', e);
-//   let coordinate = e.coordinate
-//   console.log('coordinate', coordinate);
-//   let callback = function (f) {
-//     console.log('f', f);
-//     // return f
-//   }
-//   // console.log('this.renderer_', this.renderer_);
-//   let hitTolerance = 0;
-//   let fffs = this.renderer_.forEachFeatureAtCoordinate(
-//       coordinate, this.frameState_, hitTolerance, callback, null,
-//       function () { return true }, null)
-//   // console.log('fffs', fffs);
-//   // console.log(this,
-//   //   this.hasFeatureAtPixel(pixel)
-//   // );
-// })
+_map.on('click', function (e) {
+  // console.log('e', e);
+  let coordinate = e.coordinate
+  // console.log('coordinate', coordinate);
+  let callback = function (f) {
+    console.log('f', f);
+    // return f
+  }
+  // let geo = oneFeature.getGeometry();
+  // console.log('geo', geo);
+  // console.log('isIn', geo.intersectsCoordinate(coordinate));
+  // console.log('this.renderer_', this.renderer_);
+  // let hitTolerance = 0;
+  // let fffs = this.renderer_.forEachFeatureAtCoordinate(
+  //     coordinate, this.frameState_, hitTolerance, callback, null,
+  //     function () { return true }, null)
+  // console.log('fffs', fffs);
+  // console.log(this,
+  //   this.hasFeatureAtPixel(pixel)
+  // );
+})
 
 // 提取 xml 的信息生成 feature
-let marks = XML_Parser.parseDOC(doc);
-let features = FeaFactory.toPolygon(marks);
+if ( !fs.existsSync( annoJSONFilePath ) ) {
+  console.log('json 文件不存在，读 doc，写入文件');
+  var marks = XML_Parser.parseDOC(doc);
+  let annoJSON = {
+    mpp,
+    marks
+  }
+  fs.writeFile(annoJSONFilePath, JSON.stringify(annoJSON), function (err) {
+    if (err) throw err;
+    console.log('写入成功');
+  })
+} else {
+  var marks = anno.marks;
+}
+
+console.log('marks.length', marks.length);
+let polygons = FeaFactory.toPolygons(marks);
+// let oneFeature = new ol.Feature(new ol.geom.GeometryCollection(polygons));
+let features = polygons.map(p => new ol.Feature(p))
 // let features = FeaFactory.toPolygon([
 //   [[10, -10], [100, -10], [100, -100], [10, -100]],
 //   [[50, -10], [150, -10], [150, -100], [50, -100]]
 // ]);
 Vector.addFeatures(features)
+// Vector.addFeature(oneFeature)
 // console.log('features', features);
 
 
 var {result, p_matrix} = getResult(Vector);
 console.log('result 0 ', result[0]);
 // console.log('p', p_matrix);
-let pointFeatures = FeaFactory.toPoint(p_matrix);
-Vector.addPoints(pointFeatures)
-// console.log( 'result string /n' ,result.toString());
+// let pointFeatures = FeaFactory.toPoint(p_matrix);
+// Vector.addPoints(pointFeatures)
 
 
 let labelsPath = path.join(__dirname, `../labels`)
@@ -126,9 +152,20 @@ btn_next.onclick = function (e) {
   // console.log('e', e);
   index = localStorage.index = parseInt(localStorage.index) + 1
   name = filenames[index];
-  console.log('map.imageLayer.getSource()', map.imageLayer.getSource());
+  let url = imgsdir + name + '.jpeg';
+  let source = map.imageLayer.getSource();
+  // console.log('map.imageLayer.getSource()', map.imageLayer.getSource());
+  // console.log('getAttributions', source.getAttributions());
+  // console.log('getKeys', source.getKeys());
+  // console.log('getProperties', source.getProperties());
+  // console.log('get url', source.get("url"));
+  //
+  // source.once('propertychange', function (e) {
+  //   console.log('propertychange e ', e);
+  // })
+  // source.set('url', url)
   map.imageLayer.setSource( new ol.source.ImageStatic({
-    url: imgsdir + name + '.jpeg',
+    url,
     projection: map.projection,
     imageExtent: OpenLayer.extent
   }) )

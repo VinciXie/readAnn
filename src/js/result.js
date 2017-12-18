@@ -105,13 +105,13 @@ exports.getResult = function ( { polygonSource } ) {
       result[i][j] = inLevel([x, -y], polygonSource)
       result_pre[result[i][j]] += 1
       result_pre_all[result[i][j]] += 1
-      // break
+      break
     }
-    // break
+    break
   }
   // console.log('result_pre', result_pre);
   console.log('result_pre_all', result_pre_all);
-  // console.log('time', (getTime() - t1) / 1000 + 's' );
+  console.log('time', (getTime() - t1) / 1000 + 's' );
   return {result_pre, result, p_matrix}
 }
 

@@ -37,7 +37,10 @@ function makeJSON() {
     const doc = XML_Parser.XML2DOC(annodir, name);
     // 提取 xml 的信息生成 feature
     let marks = XML_Parser.parseDOC(doc);
-    let features = FeaFactory.toPolygon(marks);
+    let polygons = FeaFactory.toPolygon(marks);
+    let features = polygons.map(p => {
+      return new Feature(p)
+    })
     Vector.polygonSource.clear(true)
     Vector.addFeatures(features)
 
